@@ -12,7 +12,8 @@ body {
   margin: 5px 5px !important;
   color: white;
 }
-.btn:hover {
+.btn:hover,
+#footer:hover {
   color: red;
 }
 .box:hover {
@@ -73,10 +74,64 @@ div {
   margin: 10px;
   padding: 5px;
   background-color: white;
+  display: flex;
+  flex-flow: column wrap;
 }
-.oswald {
+.oswaldFont {
   font-family: "Oswald Regular", "Lato Regular";
 }
 .center {
   text-align: center;
+}
+
+img {
+  display: block;
+  padding: 3px;
+  border: 1px double blue;
+  /* align-self: center; */
+  /* text-align: center; */
+}
+.panelTop {
+  display: flex;
+  flex-flow: row nowarp;
+}
+.panelLeft {
+  display: flex;
+  padding: 5px;
+}
+.panelRight {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  /* align-content: flex-start; */
+  padding: 5px;
+}
+.panelBottom {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-content: center;
+}
+
+.category::before {
+  content: "Category: ";
+  font-weight: 700;
+  text-align: left;
+}
+.author::before {
+  content: "Author: ";
+  font-weight: 700;
+  text-align: left;
+}
+.description::before {
+  content: "Description: ";
+  font-weight: 700;
+}
+.subtitle::before {
+  content: "SubTitle: ";
+  font-weight: 700;
+}
+.author,
+.category {
+  align-self: flex-start;
 }
