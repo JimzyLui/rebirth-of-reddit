@@ -135,3 +135,10 @@ img {
 .category {
   align-self: flex-start;
 }
+
+.subscribe::after {
+  content: heart;
+}
+.subscribed::after {
+  content: emptyheart;
+}
