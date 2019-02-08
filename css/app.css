@@ -137,8 +137,10 @@ img {
 }
 
 .subscribe::after {
-  content: heart;
+  content: "♥";
+  color: red;
 }
 .subscribed::after {
-  content: emptyheart;
+  content: "♥";
+  color: black;
 }

@@ -83,17 +83,36 @@ const displayBoards = arrPosts => {
     arrPosts.forEach((oPost, idx) => {
       //const oPost = arrPosts.pop();
       //console.log("dcd: ", oPost.data.children);
-      if (oPost.data.thumbnail !== "") {
-        const box = d.createElement("div");
-        box.classList.add("box");
-        const panelTop = d.createElement("div");
-        panelTop.classList.add("panelTop");
-        const panelLeft = d.createElement("div");
-        panelLeft.classList.add("panelLeft");
-        const panelRight = d.createElement("div");
-        panelRight.classList.add("panelRight");
-        const panelBottom = d.createElement("div");
-        panelBottom.classList.add("panelBottom");
+      const box = d.createElement("div");
+      box.classList.add("box");
+      const panelTop = d.createElement("div");
+      panelTop.classList.add("panelTop");
+      const panelLeft = d.createElement("div");
+      panelLeft.classList.add("panelLeft");
+      const panelRight = d.createElement("div");
+      panelRight.classList.add("panelRight");
+      const panelBottom = d.createElement("div");
+      panelBottom.classList.add("panelBottom");
+      if (oPost.data.domain === "youtube.com") {
+        const getYouTubeId = url => {
+          const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+          const match = url.match(regExp);
+          if (match && match[2].length == 11) {
+            return match[2];
+          } else {
+            return "error";
+          }
+        };
+
+        const videoId = getYouTubeId(oPost.data.url);
+        const iframe = d.createElement("iframe");
+        iframe.width = 560;
+        iframe.height = 315;
+        iframe.src = "//www.youtube.com/embed/" + videoId;
+        iframe.frameborder = 0;
+        iframe.allowfullscreen = true;
+        panelLeft.appendChild(iframe);
+      } else if (oPost.data.thumbnail !== "") {
         const img = d.createElement("div");
         // images.id = "images";
         img.id = oPost.data.id;
@@ -110,65 +129,66 @@ const displayBoards = arrPosts => {
           }
         });
         panelLeft.appendChild(img);
-        // Category
-        console.log("oPost.data.subreddit:", oPost.data.subreddit);
-        const category = d.createElement("div");
-        category.classList.add("oswald", "category");
-        category.innerHTML = oPost.data.subreddit;
-        panelRight.appendChild(category);
-        // Title
-        const title = d.createElement("h3");
-        title.classList.add("oswald", "title");
-        title.innerHTML = oPost.data.title;
-        panelBottom.appendChild(title);
-
-        // Author
-        const author = d.createElement("p");
-        author.classList.add("oswald", "author");
-        author.innerHTML = oPost.data.author;
-        panelRight.appendChild(author);
-
-        const toggleSubscription = function(event) {
-          // toggle subscription
-          const heart = event.target;
-          if (heart.classList.contains("subscribed")) {
-            heart.classList.add("subscribe");
-            heart.classList.remove("subscribed");
-          } else {
-            heart.classList.add("subscribed");
-            heart.classList.remove("subscribe");
-          }
-        };
-        // subscribe
-        const subscribe = d.createElement("div");
-        subscribe.classList.add("oswald", "subscribe");
-        subscribe.innerHTML = oPost.data.subreddit;
-        subscribe.addEventListener("click", toggleSubscription);
-        panelRight.appendChild(subscribe);
-
-        // SubTitle
-        if (oPost.data.public_description) {
-          const subtitle = d.createElement("p");
-          subtitle.classList.add("oswald", "subtitle");
-          subtitle.innerHTML = oPost.data.public_description;
-          panelRight.appendChild(subtitle);
-        }
-
-        // Description
-        if (oPost.data.description) {
-          const description = d.createElement("p");
-          description.classList.add("oswald", "description");
-          description.innerHTML = oPost.data.description;
-          panelRight.appendChild(description);
-        }
-
-        // put it all together
-        panelTop.appendChild(panelLeft);
-        panelTop.appendChild(panelRight);
-        box.appendChild(panelTop);
-        box.appendChild(panelBottom);
-        content.appendChild(box);
       }
+
+      // Category
+      console.log("oPost.data.subreddit:", oPost.data.subreddit);
+      const category = d.createElement("div");
+      category.classList.add("oswald", "category");
+      category.innerHTML = oPost.data.subreddit;
+      panelRight.appendChild(category);
+      // Title
+      const title = d.createElement("h3");
+      title.classList.add("oswald", "title");
+      title.innerHTML = oPost.data.title;
+      panelBottom.appendChild(title);
+
+      // Author
+      const author = d.createElement("p");
+      author.classList.add("oswald", "author");
+      author.innerHTML = oPost.data.author;
+      panelRight.appendChild(author);
+
+      const toggleSubscription = function(event) {
+        // toggle subscription
+        const heart = event.target;
+        if (heart.classList.contains("subscribed")) {
+          heart.classList.add("subscribe");
+          heart.classList.remove("subscribed");
+        } else {
+          heart.classList.add("subscribed");
+          heart.classList.remove("subscribe");
+        }
+      };
+      // subscribe
+      const subscribe = d.createElement("div");
+      subscribe.classList.add("oswald", "subscribe");
+      subscribe.innerHTML = oPost.data.subreddit;
+      subscribe.addEventListener("click", toggleSubscription);
+      panelRight.appendChild(subscribe);
+
+      // SubTitle
+      if (oPost.data.public_description) {
+        const subtitle = d.createElement("p");
+        subtitle.classList.add("oswald", "subtitle");
+        subtitle.innerHTML = oPost.data.public_description;
+        panelRight.appendChild(subtitle);
+      }
+
+      // Description
+      if (oPost.data.description) {
+        const description = d.createElement("p");
+        description.classList.add("oswald", "description");
+        description.innerHTML = oPost.data.description;
+        panelRight.appendChild(description);
+      }
+
+      // put it all together
+      panelTop.appendChild(panelLeft);
+      panelTop.appendChild(panelRight);
+      box.appendChild(panelTop);
+      box.appendChild(panelBottom);
+      content.appendChild(box);
     });
   } else {
     // no data
@@ -216,7 +236,8 @@ const runSubscribed = async function() {
 };
 
 const runDefaultReddit = function() {
-  url = baseURL + "chihuahua" + "/.json";
+  // url = baseURL + "chihuahua" + "/.json";
+  url = baseURL + "til" + "/.json";
   console.log(url);
   retrieveApiData(url);
 };
